@@ -10,7 +10,7 @@
 #include <vector>
 #include <cmath>
 using namespace std;
-void print_Z(vector<vector<int>> input_data, int N, int low, int high);
+void print_Z_final(int low, int high, int d_N, int r, int c);
 
 int main(int argc, const char * argv[]) {
     //Z
@@ -20,60 +20,70 @@ int main(int argc, const char * argv[]) {
     cin>>c;
     vector<vector<int>> input_data (N, vector<int>(N,0));
     
-    print_Z(input_data, N, r, c);
+    print_Z_final(0, 0, N, r, c);
     
     return 0;
 }
 
-void print_Z_final(int low, int high, int d_N, int N, int r, int c){
+void print_Z_final(int low, int high, int d_N, int r, int c){
     //네모가 하나 남을 때 까지 재귀함수를 돌린다.
     //d_N은 N과 같은 값으로 시작하지만 계속 2로 나눠지며 하나의 네모가 남을 때 까지 재귀함수를 돌릴 수 있게 해 주는 인자.
     
-    //위인 경우
-    if(r>d_N/2){
-        //위, 왼쪽 네모
-        if(c>d_N/2){
-            high+=low+pow(2,d_N)-1;
-        }
-        //위, 오른쪽 네모
-        else{
-            
-        }
-    }
-    
-    //아래인 경우
-    else{
-        //아래, 왼쪽 네모
-        if(c>d_N/2){
-            low+=pow(2,N)/2;
-            high+=pow(2,N)/2;
-            
-        }
-        //아래, 오른쪽 네모
-        else{
-            
-        }
-    }
-    
-    if(d_N==1)
-        cout<<low;
-    
-    print_Z_final(low, high, d_N, N, r, c);
-}
-
-
-void print_Z(vector<vector<int>> input_data, int N, int r, int c){
-    //네모가 하나 남을 때 까지 재귀함수를 돌린다.
-    
-    //위인 경우
-    if(r>N/2){
+    //재귀 탈출!
+    if(d_N==1){
+        if(r==0&&c==0)
+            cout<<low+0;
         
-    }
-    
-    //아래인 경우
-    else{
+        else if(r==0&&c==1)
+            cout<<low+1;
         
+        else if(r==1&&c==0)
+            cout<<low+2;
+        
+        else
+            cout<<low+3;
     }
     
-    print_Z(input_data, N, r, c);
+    else{
+        //위인 경우
+        if(r+1<=pow(2,d_N-1)){
+            //위, 왼쪽 네모
+            if(c+1<=pow(2,d_N-1)){
+                //cout<<"1번째"<<endl;
+            }
+            //위, 오른쪽 네모
+            else{
+                //cout<<"2번째"<<endl;
+                low+=pow(2,d_N-1)*pow(2,d_N-1);
+            }
+        }
+        
+        //아래인 경우
+        else{
+            //아래, 왼쪽 네모
+            if(c+1<=pow(2,d_N-1)){
+                //cout<<"3번째"<<endl;
+                low+=pow(2,d_N-1)*pow(2,d_N-1)*2;
+            }
+            //아래, 오른쪽 네모
+            else{
+                //cout<<"4번째"<<endl;
+                low+=pow(2,d_N-1)*pow(2,d_N-1)*3;
+            }
+        }
+        
+        d_N--;
+        //cout<<low<<endl;
+        //다음 좌표에 맞지 않을 땐 바꿔주기
+        if(r>=pow(2,d_N))
+            r-=pow(2,d_N);
+        
+        if(c>=pow(2,d_N))
+            c-=pow(2,d_N);
+
+        
+        if(d_N!=0)
+            print_Z_final(low, high, d_N, r, c);
+    }
+    
 }
